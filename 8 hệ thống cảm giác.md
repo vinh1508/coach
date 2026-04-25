@@ -1,7 +1,3 @@
-Dưới đây là **bản tổng hợp ngắn gọn, dễ hiểu** từ tài liệu bạn gửi:
-
----
-
 ## 🧠 Tổng quan chung
 
 * Con người có **8 hệ thống cảm giác** giúp tiếp nhận và xử lý thông tin từ môi trường.
