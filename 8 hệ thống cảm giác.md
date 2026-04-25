@@ -130,10 +130,3 @@
   * Tập trung tốt hơn
   * Học tập và giao tiếp hiệu quả hơn
 
----
-
-Nếu bạn muốn, mình có thể:
-
-* Tóm tắt **siêu ngắn (1 trang A4)**
-* Hoặc làm **bảng nhận biết nhanh từng kiểu trẻ**
-* Hoặc giúp bạn **đánh giá con thuộc nhóm nào** 👍
