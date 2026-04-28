@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>8 Hệ Thống Cảm Giác & Rối Loạn Xử Lý Cảm Giác</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f3ef;
+    color: #2c2c2c;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .page { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #5a3e6b 0%, #3c3489 100%);
+    border-radius: 16px;
+    padding: 36px 40px;
+    color: white;
+    margin-bottom: 32px;
+  }
+  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+  .header p { font-size: 14px; opacity: 0.88; line-height: 1.7; max-width: 600px; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin: 32px 0 12px;
+  }
+
+  /* 4 TYPES */
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  @media(max-width:600px){ .types-grid { grid-template-columns: 1fr 1fr; } }
+  .type-card {
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1.5px solid transparent;
+  }
+  .type-card .tname { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .type-card .tdesc { font-size: 12px; line-height: 1.5; }
+  .t-low  { background: #E6F1FB; border-color: #B5D4F4; }
+  .t-low .tname { color: #0C447C; } .t-low .tdesc { color: #185FA5; }
+  .t-seek { background: #EAF3DE; border-color: #C0DD97; }
+  .t-seek .tname { color: #27500A; } .t-seek .tdesc { color: #3B6D11; }
+  .t-sens { background: #FAEEDA; border-color: #FAC775; }
+  .t-sens .tname { color: #633806; } .t-sens .tdesc { color: #854F0B; }
+  .t-avoid { background: #FCEBEB; border-color: #F7C1C1; }
+  .t-avoid .tname { color: #791F1F; } .t-avoid .tdesc { color: #A32D2D; }
+
+  /* SENSE CARDS */
+  .sense-card {
+    background: white;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    border: 1px solid #e8e4df;
+  }
+  .sense-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .sense-header:hover { background: #fafaf8; }
+  .sense-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .sense-title { flex: 1; }
+  .sense-name { font-size: 16px; font-weight: 700; color: #2c2c2c; }
+  .sense-sub  { font-size: 12px; color: #888; margin-top: 1px; }
+  .arrow { font-size: 13px; color: #bbb; transition: transform 0.2s; }
+  .arrow.open { transform: rotate(90deg); }
+
+  .sense-body {
+    display: none;
+    border-top: 1px solid #f0ede8;
+    padding: 20px 24px;
+  }
+  .sense-body.open { display: block; }
+
+  /* Example */
+  .example-pill {
+    display: inline-block;
+    background: #f0e6f8;
+    color: #5a3e6b;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .example-text {
+    font-size: 13px;
+    font-style: italic;
+    color: #666;
+    background: #faf8fc;
+    border-left: 3px solid #c4a8d8;
+    padding: 8px 12px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 16px;
+  }
+
+  /* Signs */
+  .signs-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #999; margin-bottom: 8px;
+  }
+  .signs-list { list-style: none; margin-bottom: 16px; }
+  .signs-list li {
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .sign-badge {
+    font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+  }
+  .sl-low   { background: #E6F1FB; color: #0C447C; }
+  .sl-seek  { background: #EAF3DE; color: #27500A; }
+  .sl-sens  { background: #FAEEDA; color: #633806; }
+  .sl-avoid { background: #FCEBEB; color: #791F1F; }
+  .sign-text { color: #444; line-height: 1.5; }
+
+  /* Actions */
+  .actions-box {
+    background: #f0faf4;
+    border: 1.5px solid #9FE1CB;
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .actions-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #085041; margin-bottom: 10px;
+  }
+  .actions-list { list-style: none; }
+  .actions-list li {
+    font-size: 13px; color: #0F6E56;
+    padding: 4px 0 4px 18px;
+    position: relative; line-height: 1.5;
+    border-bottom: 1px solid #d4f0e6;
+  }
+  .actions-list li:last-child { border-bottom: none; }
+  .actions-list li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: #5DCAA5; font-weight: 700;
+  }
+
+  /* CHECKLIST */
+  .checklist-section {
+    background: #EEEDFE;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-top: 36px;
+    border: 1.5px solid #CEC8F0;
+  }
+  .checklist-section h2 { font-size: 18px; font-weight: 700; color: #3C3489; margin-bottom: 6px; }
+  .checklist-section .cs-sub { font-size: 13px; color: #534AB7; margin-bottom: 20px; }
+  .clist { list-style: none; }
+  .clist li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #D8D4F4;
+    font-size: 14px; color: #3C3489;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .clist li:last-child { border-bottom: none; }
+  .clist li input[type=checkbox] {
+    margin-top: 3px; flex-shrink: 0;
+    width: 16px; height: 16px;
+    accent-color: #534AB7;
+    cursor: pointer;
+  }
+  .clist li.checked { color: #9490CC; text-decoration: line-through; }
+
+  /* NOTE */
+  .note-box {
+    margin-top: 28px;
+    background: white;
+    border-radius: 14px;
+    padding: 20px 24px;
+    border-left: 5px solid #5a3e6b;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .note-box p { font-size: 14px; color: #444; line-height: 1.8; }
+  .note-box strong { color: #3C3489; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; }
+    .page { padding: 20px; }
+    .sense-body { display: block !important; }
+    .arrow { display: none; }
+    .sense-header { cursor: default; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>🧠 8 Hệ Thống Cảm Giác & Rối Loạn Xử Lý Cảm Giác</h1>
+    <p>Não bộ duy trì <strong>trạng thái kích thích tối ưu</strong> — không quá căng thẳng, không quá thụ động. Khi mất cân bằng, trẻ tự điều chỉnh bằng hành vi. Hành vi "khó hiểu" của con thường là phản ứng tự nhiên với cảm giác, không phải cố tình.</p>
+  </div>
+
+  <p class="section-label">4 kiểu xử lý cảm giác</p>
+  <div class="types-grid">
+    <div class="type-card t-low">
+      <div class="tname">Nhận biết kém</div>
+      <div class="tdesc">Não không ghi nhận được kích thích dù nó đang xảy ra</div>
+    </div>
+    <div class="type-card t-seek">
+      <div class="tname">Tìm kiếm</div>
+      <div class="tdesc">Não không nhận ra nhưng chủ động tìm thêm kích thích</div>
+    </div>
+    <div class="type-card t-sens">
+      <div class="tname">Nhạy cảm</div>
+      <div class="tdesc">Bị choáng ngợp nhưng không né tránh, dễ cáu kỉnh</div>
+    </div>
+    <div class="type-card t-avoid">
+      <div class="tname">Né tránh</div>
+      <div class="tdesc">Bị choáng ngợp và chủ động tránh né kích thích</div>
+    </div>
+  </div>
+
+  <p class="section-label">8 hệ thống cảm giác — bấm để xem chi tiết</p>
+  <div id="senses"></div>
+
+  <div class="checklist-section">
+    <h2>✅ Checklist nhận biết</h2>
+    <p class="cs-sub">Bấm vào các dấu hiệu bạn thấy ở con. Không phải chẩn đoán — chỉ để nhận biết và chia sẻ với chuyên gia.</p>
+    <ul class="clist" id="checklist">
+      <li><input type="checkbox"> Con che tai hoặc khóc khi nghe tiếng động đột ngột</li>
+      <li><input type="checkbox"> Con không phản hồi khi gọi tên, cần nhắc nhiều lần</li>
+      <li><input type="checkbox"> Con rất kén ăn — từ chối theo mùi hoặc kết cấu</li>
+      <li><input type="checkbox"> Con khó chịu khi mặc quần áo — kén chọn vải, cắt mác</li>
+      <li><input type="checkbox"> Con hay va vào đồ vật, vụng về hơn bạn cùng tuổi</li>
+      <li><input type="checkbox"> Con không ngồi yên, hay đung đưa hoặc đi lại</li>
+      <li><input type="checkbox"> Con chơi thô bạo, siết tay quá mạnh không kiểm soát được</li>
+      <li><input type="checkbox"> Con sợ độ cao, không thích leo trèo hoặc đu xích đu</li>
+      <li><input type="checkbox"> Con khó nhận ra mình đói, mệt hoặc buồn tiểu</li>
+      <li><input type="checkbox"> Con khó hiểu và diễn đạt cảm xúc của mình</li>
+      <li><input type="checkbox"> Con tránh tiếp xúc mắt hoặc khó chịu với ánh sáng mạnh</li>
+      <li><input type="checkbox"> Con ngửi người hoặc đồ vật một cách bất thường</li>
+    </ul>
+  </div>
+
+  <div class="note-box">
+    <p>Rối loạn xử lý cảm giác xuất hiện ở <strong>80–90% trẻ tự kỷ</strong> và <strong>rất phổ biến ở trẻ ADHD</strong>. Đây không phải khiếm khuyết — đây là <strong>sự khác biệt thần kinh</strong> cần được hiểu đúng và hỗ trợ đúng cách. Khi ba mẹ hiểu đúng, con sẽ được giúp đỡ đúng.</p>
+  </div>
+
+</div>
+
+<script>
+const data = [
+  {
+    icon:'👁️', name:'Thị giác', sub:'Ánh sáng, màu sắc, chuyển động',
+    bg:'#E6F1FB', ic:'#0C447C',
+    example:'Con hay dụi mắt, nheo mắt dưới ánh đèn huỳnh quang ở trường.',
+    signs:[
+      {text:'Va vào đồ vật, bỏ lỡ khi bắt đồ, mê ánh sáng nhấp nháy', type:'low'},
+      {text:'Nhìn chằm chằm vào đèn, tìm kiếm hiệu ứng ánh sáng', type:'seek'},
+      {text:'Khó chịu ánh sáng mạnh, nheo mắt, dụi mắt thường xuyên', type:'sens'},
+      {text:'Tránh giao tiếp mắt, thích ngồi góc tối, che mắt khi ra ngoài', type:'avoid'},
+    ],
+    actions:[
+      'Dùng đèn vàng ấm thay đèn trắng trong phòng con',
+      'Ngồi gần cửa sổ nhưng tránh ánh sáng chiếu thẳng vào mặt',
+      'Cho phép đội mũ hoặc đeo kính mờ khi con khó chịu',
+      'Giảm đồ trang trí rực rỡ quanh góc học của con',
+    ]
+  },
+  {
+    icon:'👃', name:'Khứu giác', sub:'Mùi, liên kết với cảm xúc và trí nhớ',
+    bg:'#EEEDFE', ic:'#3C3489',
+    example:'Con từ chối ăn một món dù chưa nếm, chỉ vì mùi không quen.',
+    signs:[
+      {text:'Không nhận ra mùi nguy hiểm như khói, gas', type:'low'},
+      {text:'Ngửi người khác, đồ vật, thậm chí thùng rác', type:'seek'},
+      {text:'Kén ăn theo mùi, khó chịu với nước hoa hoặc thuốc', type:'sens'},
+      {text:'Từ chối nhà vệ sinh công cộng, nôn với mùi lạ', type:'avoid'},
+    ],
+    actions:[
+      'Dùng sản phẩm vệ sinh không mùi hoặc mùi nhẹ',
+      'Giới thiệu mùi mới từ từ, có kiểm soát (bạc hà, cam)',
+      'Để con ngồi gần cửa sổ trong bữa ăn',
+      'Không ép con đến những nơi có mùi mạnh đột ngột',
+    ]
+  },
+  {
+    icon:'👂', name:'Thính giác', sub:'Xử lý âm thanh từ môi trường',
+    bg:'#FAEEDA', ic:'#633806',
+    example:'Con không thể tập trung làm bài khi có tiếng TV dù rất nhỏ.',
+    signs:[
+      {text:'Không phản hồi khi gọi tên, cần nhắc nhiều lần', type:'low'},
+      {text:'Thích nhạc, TV rất to, hay tạo tiếng ồn lớn', type:'seek'},
+      {text:'Cáu kỉnh, khó tập trung khi có tiếng ồn nền', type:'sens'},
+      {text:'Khóc hoặc che tai khi nghe tiếng động đột ngột', type:'avoid'},
+    ],
+    actions:[
+      'Dùng tai nghe chống ồn hoặc tiếng ồn trắng khi con học bài',
+      'Báo trước khi có tiếng lớn: "Con ơi, sắp có còi xe nhé"',
+      'Tạo "góc yên tĩnh" cho con khi bị quá tải âm thanh',
+      'Gọi tên con rồi đợi 3 giây trước khi nhắc lại',
+    ]
+  },
+  {
+    icon:'✋', name:'Xúc giác', sub:'Chạm, nhiệt độ, áp lực, đau',
+    bg:'#E1F5EE', ic:'#085041',
+    example:'Con nổi giận mỗi sáng vì cảm giác mép tất chạm vào ngón chân.',
+    signs:[
+      {text:'Chịu đau cao, không nhận ra tay bẩn hay nóng', type:'low'},
+      {text:'Chạm vào mọi thứ, siết tay quá chặt, thích cảm giác nặng', type:'seek'},
+      {text:'Sợ bị chạm bất ngờ, cáu khi đeo tất hoặc giày', type:'sens'},
+      {text:'Không thích ôm, kén chọn quần áo theo chất vải', type:'avoid'},
+    ],
+    actions:[
+      'Cắt mác quần áo, chọn vải mềm mịn, cổ rộng',
+      'Dùng tất không đường may hoặc mặc tất trái',
+      'Cho phép con mặc đồ quen thuộc đến trường',
+      'Thử chăn có trọng lượng khi con cần bình tĩnh',
+    ]
+  },
+  {
+    icon:'👅', name:'Vị giác', sub:'Vị, kết cấu, nhiệt độ thức ăn',
+    bg:'#FAECE7', ic:'#712B13',
+    example:'Con ăn đúng 4 món, từ chối mọi thứ còn lại dù đói.',
+    signs:[
+      {text:'Cho đồ vật vào miệng, cắn không phải do tức giận', type:'seek'},
+      {text:'Thích đồ ăn cực cay, cực chua hoặc mạnh vị', type:'seek'},
+      {text:'Kén ăn cực đoan — chỉ ăn vài món quen thuộc', type:'avoid'},
+      {text:'Nôn hoặc khóc khi tiếp xúc kết cấu lạ trong miệng', type:'avoid'},
+    ],
+    actions:[
+      'Giới thiệu món mới bên cạnh món quen, không ép ăn',
+      'Thử biến thể của món con thích: cùng vị nhưng khác dạng',
+      'Dùng đồ nhai chuyên dụng nếu con hay cắn đồ vật',
+      'Tạo thói quen bữa ăn cố định — giờ giấc và vị trí ngồi ổn định',
+    ]
+  },
+  {
+    icon:'⚖️', name:'Tiền đình', sub:'Cân bằng và nhận thức chuyển động',
+    bg:'#EEEDFE', ic:'#26215C',
+    example:'Con lắc lư trên ghế khi học — đó là cách não con tự điều chỉnh, không phải phá.',
+    signs:[
+      {text:'Hay vấp ngã, không chóng mặt dù quay nhiều', type:'low'},
+      {text:'Nhảy từ độ cao, thích quay vòng không biết mệt', type:'seek'},
+      {text:'Ngồi không yên, lắc lư, nghiêng người liên tục', type:'sens'},
+      {text:'Sợ độ cao, say xe, tránh đu xích đu hoặc sân chơi', type:'avoid'},
+    ],
+    actions:[
+      'Cho phép con ngồi ghế có thể lắc nhẹ hoặc đệm tròn khi học',
+      'Xích đu 10–15 phút trước giờ học giúp con tập trung hơn',
+      'Với bé sợ độ cao: bắt đầu từ hoạt động sát đất, làm quen dần',
+      'Trampoline mini trong nhà là công cụ hỗ trợ rất hiệu quả',
+    ]
+  },
+  {
+    icon:'💪', name:'Cảm giác bản thể', sub:'Vị trí và lực của cơ thể trong không gian',
+    bg:'#EAF3DE', ic:'#173404',
+    example:'Con siết tay bạn quá mạnh khi chơi — không phải hung hăng, não con chưa đo được lực.',
+    signs:[
+      {text:'Vụng về, hay làm vỡ đồ, cầm vật quá yếu hoặc quá mạnh', type:'low'},
+      {text:'Đẩy mạnh, thích đồ nặng, đi nhón chân, dựa vào tường', type:'seek'},
+      {text:'Không ngồi yên, dựa vào người khác hoặc bàn ghế', type:'seek'},
+      {text:'Mệt nhanh khi vận động, tránh hoạt động thể chất', type:'avoid'},
+    ],
+    actions:[
+      'Giao "việc nặng": mang cặp sách, đẩy ghế, xách đồ giúp ba mẹ',
+      'Bò, hít đất, leo cầu thang bằng tay chân trước bữa học',
+      'Chăn có trọng lượng hoặc áo có trọng lượng khi con ngồi học',
+      'Xâu chuỗi, nặn đất, Lego giúp điều chỉnh lực tay',
+    ]
+  },
+  {
+    icon:'❤️', name:'Cảm giác nội quan', sub:'"Giác quan ẩn" — tín hiệu bên trong cơ thể',
+    bg:'#FCEBEB', ic:'#501313',
+    example:'Con nổi giận dữ dội rồi không biết tại sao — có thể con đói hoặc mệt mà không tự nhận ra.',
+    signs:[
+      {text:'Không nhận ra mình đói, mệt, đau, hoặc buồn tiểu', type:'low'},
+      {text:'Khó hiểu và mô tả cảm xúc của bản thân', type:'low'},
+      {text:'Phản ứng thái quá hoặc không phản ứng với đau', type:'low'},
+      {text:'Kỹ năng xã hội và tự điều chỉnh bị ảnh hưởng', type:'low'},
+    ],
+    actions:[
+      'Nhắc theo giờ cố định: "Giờ này mình uống nước nhé con"',
+      'Dạy con nhận biết cảm xúc qua ảnh, thẻ cảm xúc',
+      'Đặt lịch ăn uống cố định — không chờ con nói đói',
+      'Làm việc cùng nhà trị liệu nghề nghiệp chuyên về xử lý cảm giác',
+    ]
+  },
+];
+
+const typeLabel = { low:'Nhận biết kém', seek:'Tìm kiếm', sens:'Nhạy cảm', avoid:'Né tránh' };
+
+const container = document.getElementById('senses');
+data.forEach((s, i) => {
+  const card = document.createElement('div');
+  card.className = 'sense-card';
+
+  const signsHtml = s.signs.map(sg =>
+    `<li>
+      <span class="sign-badge sl-${sg.type}">${typeLabel[sg.type]}</span>
+      <span class="sign-text">${sg.text}</span>
+    </li>`
+  ).join('');
+
+  const actionsHtml = s.actions.map(a => `<li>${a}</li>`).join('');
+
+  card.innerHTML = `
+    <div class="sense-header" onclick="toggle(${i})">
+      <div class="sense-icon" style="background:${s.bg};">${s.icon}</div>
+      <div class="sense-title">
+        <div class="sense-name">${s.name}</div>
+        <div class="sense-sub">${s.sub}</div>
+      </div>
+      <div class="arrow" id="arr${i}">▶</div>
+    </div>
+    <div class="sense-body" id="body${i}">
+      <span class="example-pill">Ví dụ thực tế</span>
+      <div class="example-text">"${s.example}"</div>
+      <p class="signs-title">Dấu hiệu có thể thấy ở con</p>
+      <ul class="signs-list">${signsHtml}</ul>
+      <div class="actions-box">
+        <p class="actions-title">Hành động cụ thể cho bé 8 tuổi ADHD</p>
+        <ul class="actions-list">${actionsHtml}</ul>
+      </div>
+    </div>`;
+  container.appendChild(card);
+});
+
+function toggle(i) {
+  const body = document.getElementById('body'+i);
+  const arr  = document.getElementById('arr'+i);
+  const open = body.classList.toggle('open');
+  arr.classList.toggle('open', open);
+}
+
+document.querySelectorAll('.clist li').forEach(li => {
+  li.addEventListener('click', () => {
+    const cb = li.querySelector('input');
+    cb.checked = !cb.checked;
+    li.classList.toggle('checked', cb.checked);
+  });
+});
+</script>
+</body>
+</html>
